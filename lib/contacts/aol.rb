@@ -1,5 +1,5 @@
 class Contacts
-  require 'hpricot'
+  require 'hpricot' if RUBY_VERSION < '1.9'
   require 'csv'
   class Aol < Base
     URL                 = "http://www.aol.com/"
