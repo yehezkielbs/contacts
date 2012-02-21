@@ -1,5 +1,4 @@
-dir = File.dirname(__FILE__)
-require "#{dir}/../test_helper"
+require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 require 'contacts'
 
 class HotmailContactImporterTest < ContactImporterTestCase
@@ -24,13 +23,13 @@ class HotmailContactImporterTest < ContactImporterTestCase
       assert contacts.include?(contact), "Could not find: #{contact.inspect} in #{contacts.inspect}"
     end
   end
-  
+
   def test_importer_fails_with_invalid_msn_password
     assert_raise(Contacts::AuthenticationError) do
       Contacts.new(:hotmail, "test@msn.com","wrong_password")
     end
   end
-  
+
   # Since the hotmail scraper doesn't read names, test email
   def test_fetch_email
     contacts = Contacts.new(:hotmail, @account.username, @account.password).contacts
