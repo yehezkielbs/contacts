@@ -1,4 +1,4 @@
-require 'csv'
+require 'fastercsv'
 require 'rubygems'
 require 'nokogiri'
 
@@ -61,8 +61,8 @@ class Contacts
       if @contacts.nil? && connected?
         url = URI.parse(contact_list_url)
         data, resp, cookies, forward = get(get_contact_list_url, @cookies )
-
-        @contacts = CSV.parse(data, {:headers => true, :col_sep => data[7]}).map do |row|
+        data.gsub!(";",",")
+        @contacts = FasterCSV.parse(data, {:headers => true}).map do |row|
           name = ""
           name = row["First Name"] if !row["First Name"].nil?
           name << " #{row["Last Name"]}" if !row["Last Name"].nil?

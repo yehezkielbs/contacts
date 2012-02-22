@@ -1,4 +1,5 @@
 class Contacts
+  require 'fastercsv'
   require 'hpricot' if RUBY_VERSION < '1.9'
   require 'csv'
   class Aol < Base
@@ -135,7 +136,7 @@ class Contacts
   private
     
     def parse(data, options={})
-      data = CSV::Reader.parse(data)
+      data = FasterCSV::Reader.parse(data)
       col_names = data.shift
       @contacts = data.map do |person|
         ["#{person[0]} #{person[1]}", person[4]] if person[4] && !person[4].empty?
