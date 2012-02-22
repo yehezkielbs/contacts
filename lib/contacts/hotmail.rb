@@ -1,11 +1,13 @@
 require 'csv'
+require 'rubygems'
+require 'nokogiri'
 
 class Contacts
   class Hotmail < Base
     URL = "https://login.live.com/login.srf?id=2"
-    CONTACT_LIST_URL = "https://col115.mail.live.com/mail/GetContacts.aspx"
+    CONTACT_LIST_URL = "https://mail.live.com/mail/GetContacts.aspx"
     PROTOCOL_ERROR = "Hotmail has changed its protocols, please upgrade this library first. If that does not work, report this error at http://rubyforge.org/forum/?group_id=2693"
-    PWDPAD = ""
+    PWDPAD = "IfYouAreReadingThisYouHaveTooMuchFreeTime"
 
     def real_connect
 
@@ -58,9 +60,9 @@ class Contacts
     def contacts(options = {})
       if @contacts.nil? && connected?
         url = URI.parse(contact_list_url)
-        data, resp, cookies, forward = get(CONTACT_LIST_URL, @cookies )
+        data, resp, cookies, forward = get(get_contact_list_url, @cookies )
 
-        @contacts = CSV.parse(data, {:headers => true}).map do |row|
+        @contacts = CSV.parse(data, {:headers => true, :col_sep => data[7]}).map do |row|
           name = ""
           name = row["First Name"] if !row["First Name"].nil?
           name << " #{row["Last Name"]}" if !row["Last Name"].nil?
@@ -74,5 +76,13 @@ class Contacts
     private
 
     TYPES[:hotmail] = Hotmail
+
+    # the contacts url is dynamic
+    # luckily it tells us where to find it
+    def get_contact_list_url
+      data = get(CONTACT_LIST_URL, @cookies)[0]
+      html_doc = Nokogiri::HTML(data)
+      html_doc.xpath("//a")[0]["href"]
+    end
   end
 end
