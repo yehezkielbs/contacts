@@ -8,7 +8,7 @@ Contacts is a universal interface to grab contact list information from various 
 
 == Installation
 
- $ gem install liangzan-contacts
+ $ gem install deneuxa-contacts
 
 or on the *Gemfile*
 
