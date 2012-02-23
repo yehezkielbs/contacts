@@ -62,12 +62,17 @@ class Contacts
         url = URI.parse(contact_list_url)
         data, resp, cookies, forward = get(get_contact_list_url, @cookies )
         data.gsub!(";",",")
-        @contacts = FasterCSV.parse(data, {:headers => true}).map do |row|
+        data.gsub!("'","")
+        data = data.gsub(/[\x80-\xff]/,"")
+        
+        @contacts = FasterCSV.parse(data, {:headers => true, :col_sep => ','}).map do |row|
           name = ""
           name = row["First Name"] if !row["First Name"].nil?
           name << " #{row["Last Name"]}" if !row["Last Name"].nil?
-          [name, row["E-mail Address"]]
+          email = row["E-mail Address"] || ""
+          [name, email] 
         end
+        @contacts.delete_if{|x| x[1].blank?}
       else
         @contacts || []
       end

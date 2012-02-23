@@ -4,7 +4,7 @@ require 'rake/testtask'
 
 def gemspec
   @gemspec ||= begin
-    file = File.expand_path("../liangzan-contacts.gemspec", __FILE__)
+    file = File.expand_path("../deneuxa-contacts.gemspec", __FILE__)
     eval(File.read(file), binding, file)
   end
 end

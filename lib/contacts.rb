@@ -1,4 +1,5 @@
-$:.unshift(File.dirname(__FILE__)+"/contacts/")
+class Contacts
+  $:.unshift(File.dirname(__FILE__)+"/contacts/")
 
 require 'rubygems'
 
@@ -10,3 +11,4 @@ require 'yahoo'
 require 'plaxo'
 require 'aol'
 require 'mailru'
+end
