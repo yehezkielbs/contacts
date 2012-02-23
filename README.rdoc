@@ -12,7 +12,7 @@ Contacts is a universal interface to grab contact list information from various 
 
 or on the *Gemfile*
 
- gem 'liangzan-contacts', '~>1.2.8', :require => 'contacts'
+ gem 'deneuxa-contacts', '~>1.2.10', :require => 'contacts'
 
 == Background
 
