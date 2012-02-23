@@ -1,4 +1,4 @@
-= liangzan-contacts
+= deneuxa-contacts
 
 deneux-contacts is a fork of the liangzan-contacts gem. It aims to be compatible with 1.8 when liangzan-contacts is 1.9&above compatible.
 Original gem: cardmagick/contacts .
