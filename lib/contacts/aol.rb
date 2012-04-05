@@ -6,12 +6,12 @@ class Contacts
     URL                 = "http://www.aol.com/"
     LOGIN_URL           = "https://my.screenname.aol.com/_cqr/login/login.psp"
     LOGIN_REFERER_URL   = "http://webmail.aol.com/"
-    LOGIN_REFERER_PATH = "sitedomain=sns.webmail.aol.com&lang=en&locale=us&authLev=0&uitype=mini&loginId=&redirType=js&xchk=false"
-    AOL_NUM = "29970-343" # this seems to change each time they change the protocol
+    LOGIN_REFERER_PATH  = "sitedomain=sns.webmail.aol.com&lang=en&locale=us&authLev=0&uitype=mini&loginId=&redirType=js&xchk=false"
+    AOL_NUM             = "35752-111" # this seems to change each time they change the protocol
     
-    CONTACT_LIST_URL    = "http://webmail.aol.com/#{AOL_NUM}/aim-2/en-us/Lite/ContactList.aspx?folder=Inbox&showUserFolders=False"
-    CONTACT_LIST_CSV_URL = "http://webmail.aol.com/#{AOL_NUM}/aim-2/en-us/Lite/ABExport.aspx?command=all"
-    PROTOCOL_ERROR      = "AOL has changed its protocols, please upgrade this library first. If that does not work, dive into the code and submit a patch at http://github.com/cardmagic/contacts"
+    CONTACT_LIST_URL     = "http://mail.aol.com/#{AOL_NUM}/aol-6/en-us/Lite/ContactList.aspx"
+    CONTACT_LIST_CSV_URL = "http://mail.aol.com/#{AOL_NUM}/aol-6/en-us/Lite/ABExport.aspx?command=all" 
+    PROTOCOL_ERROR       = "AOL has changed its protocols, please upgrade this library first. If that does not work, dive into the code and submit a patch at http://github.com/cardmagic/contacts"
     
     def real_connect
       if login.strip =~ /^(.+)@aol\.com$/ # strip off the @aol.com for AOL logins
@@ -136,7 +136,7 @@ class Contacts
   private
     
     def parse(data, options={})
-      data = FasterCSV::Reader.parse(data)
+      data = FasterCSV.parse(data)
       col_names = data.shift
       @contacts = data.map do |person|
         ["#{person[0]} #{person[1]}", person[4]] if person[4] && !person[4].empty?
