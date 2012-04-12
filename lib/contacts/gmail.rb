@@ -21,7 +21,19 @@ class Contacts
         entry.elements.each('gd:email') do |e|
           email = e.attribute('address').value if e.attribute('primary')
         end
-        [title, email] unless email.nil?
+
+        avatar = nil
+        begin
+          avatar_el = entry.elements['link[@type="image/*"]']
+          if avatar_el
+            avatar_response = @client.get(avatar_el.attribute('href').to_s)
+            avatar = avatar_response.body if avatar_response.status_code == 200
+          end
+        rescue
+          avatar = nil
+        end
+
+        [title, email, avatar] unless email.nil?
       end
       @contacts.compact!
     rescue GData::Client::AuthorizationError => e
