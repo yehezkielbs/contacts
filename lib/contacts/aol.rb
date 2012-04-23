@@ -134,14 +134,20 @@ class Contacts
       end
     end
   private
-    
+
     def parse(data, options={})
-      data = FasterCSV.parse(data)
-      col_names = data.shift
-      @contacts = data.map do |person|
+      parsed = []
+      data.split("\n").each do |line|
+        begin
+          parsed << FasterCSV.parse_line(line)
+        rescue
+        end
+      end
+      col_names = parsed.shift
+      @contacts = parsed.map do |person|
         ["#{person[0]} #{person[1]}", person[4]] if person[4] && !person[4].empty?
       end.compact
-    end    
+    end
  
     def h_to_query_string(hash)
       u = ERB::Util.method(:u)
