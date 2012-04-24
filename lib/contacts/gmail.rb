@@ -11,10 +11,10 @@ class Contacts
     end
     
     def real_connect
-      @client = GData::Client::Contacts.new
-      @client.clientlogin(@login, @password, @captcha_token, @captcha_response)
+      gclient = GData::Client::Contacts.new
+      gclient.clientlogin(@login, @password, @captcha_token, @captcha_response)
       
-      feed = @client.get(CONTACTS_FEED).to_xml
+      feed = gclient.get(CONTACTS_FEED).to_xml
       
       @contacts = feed.elements.to_a('entry').collect do |entry|
         title, email = entry.elements['title'].text, nil
@@ -22,18 +22,10 @@ class Contacts
           email = e.attribute('address').value if e.attribute('primary')
         end
 
-        avatar = nil
-        begin
-          avatar_el = entry.elements['link[@type="image/*"]']
-          if avatar_el
-            avatar_response = @client.get(avatar_el.attribute('href').to_s)
-            avatar = avatar_response.body if avatar_response.status_code == 200
-          end
-        rescue
-          avatar = nil
-        end
+        avatar_el = entry.elements['link[@type="image/*"]']
+        avatar_url = avatar_el ? avatar_el.attribute('href').to_s : nil
 
-        [title, email, avatar] unless email.nil?
+        [title, email, avatar_url] unless email.nil?
       end
       @contacts.compact!
     rescue GData::Client::AuthorizationError => e
