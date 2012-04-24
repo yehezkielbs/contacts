@@ -136,17 +136,24 @@ class Contacts
   private
 
     def parse(data, options={})
-      parsed = []
+      @contacts = []
+
+      first_line = true
       data.split("\n").each do |line|
         begin
-          parsed << FasterCSV.parse_line(line)
+          if first_line
+            first_line = false
+          else
+            person = FasterCSV.parse_line(line)
+            if person[4] && !person[4].empty?
+              @contacts << ["#{person[0]} #{person[1]}", person[4]]
+            end
+          end
         rescue
         end
       end
-      col_names = parsed.shift
-      @contacts = parsed.map do |person|
-        ["#{person[0]} #{person[1]}", person[4]] if person[4] && !person[4].empty?
-      end.compact
+
+      @contacts = @contacts.compact
     end
  
     def h_to_query_string(hash)
