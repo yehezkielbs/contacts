@@ -3,7 +3,7 @@ require 'gdata'
 class Contacts
   class Gmail < Base
     
-    CONTACTS_SCOPE = 'http://www.google.com/m8/feeds/'
+    CONTACTS_SCOPE = 'https://www.google.com/m8/feeds/'
     CONTACTS_FEED = CONTACTS_SCOPE + 'contacts/default/full/?max-results=1000'
     
     def contacts
@@ -12,10 +12,27 @@ class Contacts
     
     def real_connect
       gclient = GData::Client::Contacts.new
-      gclient.clientlogin(@login, @password, @captcha_token, @captcha_response)
-      
-      feed = gclient.get(CONTACTS_FEED).to_xml
-      
+
+      if (@oauth_info)
+        gclient.oauth_info = @oauth_info
+      else
+        gclient.clientlogin(@login, @password, @captcha_token, @captcha_response)
+      end
+
+      begin
+        response = gclient.get(CONTACTS_FEED)
+      rescue GData::Client::AuthorizationError
+        # if oauth fails, try username & password
+        if @oauth_info && @login && @password
+          gclient.clientlogin(@login, @password, @captcha_token, @captcha_response)
+          response = gclient.get(CONTACTS_FEED)
+        else
+          raise
+        end
+      end
+
+      feed = response.to_xml
+
       @contacts = feed.elements.to_a('entry').collect do |entry|
         title, email = entry.elements['title'].text, nil
         entry.elements.each('gd:email') do |e|

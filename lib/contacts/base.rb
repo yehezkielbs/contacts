@@ -14,6 +14,7 @@ class Contacts
     def initialize(login, password, options={})
       @login = login
       @password = password
+      @oauth_info = (options[:oauth_info] && options[:oauth_info].size > 0) ? options[:oauth_info] : nil
       @captcha_token = options[:captcha_token]
       @captcha_response = options[:captcha_response]
       @connections = {}
@@ -21,7 +22,9 @@ class Contacts
     end
 
     def connect
-      raise AuthenticationError, "Login and password must not be nil, login: #{@login.inspect}, password: #{@password.inspect}" if @login.nil? || @login.empty? || @password.nil? || @password.empty?
+      unless @oauth_info
+        raise AuthenticationError, "Login and password must not be nil, login: #{@login.inspect}, password: #{@password.inspect}" if @login.nil? || @login.empty? || @password.nil? || @password.empty?
+      end
       real_connect
     end
 

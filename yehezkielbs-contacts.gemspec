@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "yehezkielbs-contacts"
-  s.version = "1.2.14"
+  s.version = "1.2.15"
   s.platform = Gem::Platform::RUBY
   s.authors = ["Lucas Carlson","Brad Imbierowicz", "Wong Liang Zan", "Mateusz Konikowski", "Laurynas Butkus"]
   s.email = "yehezkielbs@gmail.com"
@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.description = "A universal interface to grab contact list information from Yahoo, AOL, Gmail, Hotmail, Plaxo, GMX.net, Web.de, inbox.lt, seznam.cz, t-online.de."
 
   s.add_dependency "json", "~> 1.6.5"
-  s.add_dependency "gdata", "~> 1.1.1"
+  s.add_dependency "yehezkielbs-gdata", "~> 1.1.2"
   s.add_dependency "nokogiri", "~> 1.5.0"
   s.add_dependency "nokogiri", "~> 1.5.0"
   s.add_dependency "fastercsv", "~> 1.5.4"
